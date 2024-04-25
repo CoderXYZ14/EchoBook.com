@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const Listing = require("./models/listing.js");
 
 const MONGO_URL = "mongodb://localhost:27017/wanderlust";
 main()
@@ -15,6 +16,17 @@ async function main() {
 }
 app.get("/", (req, res) => {
   res.send("Hi , I am root");
+});
+app.get("/testListing", async (req, res) => {
+  let sampleListing = new Listing({
+    title: "My new Villa",
+    description: "By now",
+    price: 1200,
+    location: "india",
+    country: "india",
+  });
+  await sampleListing.save();
+  res.send("Successfull");
 });
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
