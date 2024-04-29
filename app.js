@@ -31,6 +31,18 @@ app.get("/", (req, res) => {
   res.send("Hi , I am root");
 });
 
+const validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  //console.log(result);
+  if (error) {
+    //extra stuff
+    let errMSG = error.details.map((e) => e.message).join(",");
+    // throw new ExpressError(error, 400);
+    throw new ExpressError(errMSG, 400);
+  } else {
+    next();
+  }
+};
 //index route
 app.get(
   "/listings",
@@ -57,12 +69,8 @@ app.get(
 //Create ROute
 app.post(
   "/listings",
+  validateListing,
   wrapAsync(async (req, res, next) => {
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    if (result.error) {
-      throw new ExpressError(result.error.details[0].message, 400);
-    }
     const { title, description, price, location, country } = req.body;
     const newListing = new Listing({
       title,
@@ -92,9 +100,9 @@ app.get(
 //Update Route
 app.put(
   "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    console.log(id + 2);
     await Listing.findByIdAndUpdate(id, { ...req.body });
     res.redirect(`/listings/${id}`);
   })
