@@ -7,7 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./models/review.js");
 
 const MONGO_URL = "mongodb://localhost:27017/wanderlust";
@@ -34,6 +34,18 @@ app.get("/", (req, res) => {
 
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
+  //console.log(result);
+  if (error) {
+    //extra stuff
+    let errMSG = error.details.map((e) => e.message).join(",");
+    // throw new ExpressError(error, 400);
+    throw new ExpressError(errMSG, 400);
+  } else {
+    next();
+  }
+};
+const validateReview = (req, res, next) => {
+  let { error } = reviewSchema.validate(req.body);
   //console.log(result);
   if (error) {
     //extra stuff
@@ -123,6 +135,7 @@ app.delete(
 //POST
 app.post(
   "/listings/:id/reviews",
+  validateReview,
   wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
