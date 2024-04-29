@@ -6,10 +6,18 @@
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input name="title" placeholder="Add a Catchy Title" type="text" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please enter a title.
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea name="description" class="form-control" required></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description.
+                    </div>
+
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image Link</label>
@@ -19,10 +27,16 @@
                     <div class="mb-3 col-md-4">
                         <label for="price" class="form-label">Price</label>
                         <input name="price" placeholder="1200" type="number" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid Price.
+                        </div>
                     </div>
                     <div class="mb-3 col-md-8">
                         <label for="country" class="form-label">Country</label>
                         <input name="country" placeholder="India" type="text" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid Country.
+                        </div>
                     </div>
                 </div>
 
@@ -30,6 +44,9 @@
                     <label for="location" class="form-label">Location</label>
                     <input name="location" placeholder="Lucknow, Uttar Pradesh" type="text" class="form-control"
                         required>
+                    <div class="invalid-feedback">
+                        Please enter a valid Location.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-dark add-btn">Add</button>
