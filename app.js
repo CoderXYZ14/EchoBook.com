@@ -8,6 +8,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema } = require("./schema.js");
+const Review = require("./models/review.js");
 
 const MONGO_URL = "mongodb://localhost:27017/wanderlust";
 main()
@@ -117,17 +118,22 @@ app.delete(
     res.redirect("/listings");
   })
 );
-// app.get("/testListing", async (req, res) => {
-//   let sampleListing = new Listing({
-//     title: "My new Villa",
-//     description: "By now",
-//     price: 1200,
-//     location: "india",
-//     country: "india",
-//   });
-//   await sampleListing.save();
-//   res.send("Successfull");
-// });
+
+//Reviews
+//POST
+app.post(
+  "/listings/:id/reviews",
+  wrapAsync(async (req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    //res.send("new reviews saved");
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
+
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
