@@ -56,7 +56,8 @@ router.post(
       country,
     });
     await newListing.save();
-    res.redirect("/");
+    req.flash("success", "New Listing Added");
+    res.redirect("/listings");
   })
 );
 
