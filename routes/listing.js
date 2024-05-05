@@ -38,6 +38,10 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");
+    if (!listing) {
+      req.flash("error", "No Listing Found");
+      res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { listing });
   })
 );
@@ -70,6 +74,10 @@ router.get(
 
     const listing = await Listing.findById(id);
     console.log(listing);
+    if (!listing) {
+      req.flash("error", "No Listing Found");
+      res.redirect("/listings");
+    }
     res.render("listings/edit.ejs", { listing });
   })
 );
@@ -92,7 +100,7 @@ router.delete(
   wrapAsync(async (req, res) => {
     let id = req.params.id;
     let deletedListing = await Listing.findByIdAndDelete(id);
-    req.flash("success", "Listing Deleted!");
+    req.flash("failure", "Listing Deleted!");
     res.redirect("/listings");
   })
 );
