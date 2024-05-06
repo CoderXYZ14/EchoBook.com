@@ -64,6 +64,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/demouser", async (req, res) => {
+  let fakeUser = new User({
+    email: "abcf@gmail.com",
+    username: "demouser",
+  });
+  let registeredUser = await User.register(fakeUser, "helloWorld");
+  res.send(registeredUser);
+});
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 
